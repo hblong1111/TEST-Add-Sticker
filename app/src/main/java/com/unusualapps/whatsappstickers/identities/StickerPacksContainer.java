@@ -29,31 +29,9 @@ public class StickerPacksContainer {
         return this.stickerPacks.remove(index);
     }
 
-    public StickerPack getStickerPack(int index) {
-        return this.stickerPacks.get(index);
-    }
-
-    public String getAndroidPlayStoreLink() {
-        return androidPlayStoreLink;
-    }
-
-    public void setAndroidPlayStoreLink(String androidPlayStoreLink) {
-        this.androidPlayStoreLink = androidPlayStoreLink;
-    }
-
-    public String getIosAppStoreLink() {
-        return iosAppStoreLink;
-    }
-
-    public void setIosAppStoreLink(String iosAppStoreLink) {
-        this.iosAppStoreLink = iosAppStoreLink;
-    }
 
     public List<StickerPack> getStickerPacks() {
         return stickerPacks;
     }
 
-    public void setStickerPacks(List<StickerPack> stickerPacks) {
-        this.stickerPacks = stickerPacks;
-    }
 }

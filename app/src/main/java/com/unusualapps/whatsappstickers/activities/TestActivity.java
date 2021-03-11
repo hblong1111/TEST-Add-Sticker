@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +18,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.sangcomz.fishbun.FishBun;
 import com.sangcomz.fishbun.adapter.image.impl.GlideAdapter;
@@ -31,24 +37,32 @@ import com.unusualapps.whatsappstickers.whatsapp_api.StickerPackDetailsActivity;
 
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.BlockingDeque;
 
 public class TestActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 111;
     private ArrayList<Uri> uries;
     private Context context;
+    List<File> files;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         context = this;
+        files = new ArrayList<>();
         uries = new ArrayList<>();
 
         new TaskGetUriFromUrl().execute();
@@ -58,13 +72,45 @@ public class TestActivity extends AppCompatActivity {
     class TaskGetUriFromUrl extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-            uries.add(getImageUri(context, getBitmapFromURL("https://cdn-thethao247.com/upload/kienlv/2020/09/11/tuyen-thu-dt-viet-nam-cong-khai-ban-gai-xinh-nhu-mong1599795990.png")));
-            uries.add(getImageUri(context, getBitmapFromURL("https://cdn-thethao247.com/upload/kienlv/2020/09/11/tuyen-thu-dt-viet-nam-cong-khai-ban-gai-xinh-nhu-mong1599795990.png")));
-            uries.add(getImageUri(context, getBitmapFromURL("https://cdn-thethao247.com/upload/kienlv/2020/09/11/tuyen-thu-dt-viet-nam-cong-khai-ban-gai-xinh-nhu-mong1599795990.png")));
+//            uries.add(getImageUri(context, getBitmapFromURL("https://cdn-thethao247.com/upload/kienlv/2020/09/11/tuyen-thu-dt-viet-nam-cong-khai-ban-gai-xinh-nhu-mong1599795990.png")));
+//            uries.add(getImageUri(context, getBitmapFromURL("https://cdn-thethao247.com/upload/kienlv/2020/09/11/tuyen-thu-dt-viet-nam-cong-khai-ban-gai-xinh-nhu-mong1599795990.png")));
+//            uries.add(getImageUri(context, getBitmapFromURL("https://cdn-thethao247.com/upload/kienlv/2020/09/11/tuyen-thu-dt-viet-nam-cong-khai-ban-gai-xinh-nhu-mong1599795990.png")));
 
+            try {
+                uries.add(Uri.fromFile(saveImageToExternal(getBitmapFromURL("https://cdn-thethao247.com/upload/kienlv/2020/09/11/tuyen-thu-dt-viet-nam-cong-khai-ban-gai-xinh-nhu-mong1599795990.png"))));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             Log.d("hblong", "TestActivity | onCreate: " + uries.get(0).toString());
             return null;
         }
+    }
+
+    public File saveImageToExternal(Bitmap bm) throws IOException {
+        //Create Path to save Image
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES); //Creates app specific folder
+        path.mkdirs();
+        File imageFile = new File(path, System.currentTimeMillis() + ".jpg"); // Imagename.png
+        FileOutputStream out = new FileOutputStream(imageFile);
+        try {
+            bm.compress(Bitmap.CompressFormat.PNG, 100, out); // Compress Image
+            out.flush();
+            out.close();
+
+            // Tell the media scanner about the new file so that it is
+            // immediately available to the user.
+            MediaScannerConnection.scanFile(context, new String[]{imageFile.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                public void onScanCompleted(String path, Uri uri) {
+                    Log.d("hblong", "TestActivity | onScanCompleted: " + path);
+                    Log.d("hblong", "TestActivity | onScanCompleted: " + uri.toString());
+                }
+            });
+        } catch (Exception e) {
+            throw new IOException();
+        }
+
+        files.add(imageFile);
+        return imageFile;
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
@@ -73,20 +119,31 @@ public class TestActivity extends AppCompatActivity {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+
     public Bitmap getBitmapFromURL(String src) {
+//        try {
+//            java.net.URL url = new java.net.URL(src);
+//            HttpURLConnection connection = (HttpURLConnection) url
+//                    .openConnection();
+//            connection.setDoInput(true);
+//            connection.connect();
+//            InputStream input = connection.getInputStream();
+//            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+//            return myBitmap;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+
+        Bitmap bitmap = null;
         try {
-            java.net.URL url = new java.net.URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url
-                    .openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
+            URL url = new URL(src);
+            bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            System.out.println(e);
         }
+
+        return bitmap;
     }
 
 
@@ -110,6 +167,7 @@ public class TestActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
 
+                //fixme: create pack
                 Intent intent = new Intent(this, StickerPackDetailsActivity.class);
                 intent.putExtra(StickerPackDetailsActivity.EXTRA_SHOW_UP_BUTTON, true);
 
@@ -165,7 +223,15 @@ public class TestActivity extends AppCompatActivity {
     }
 
     public void save(View view) {
-
         saveStickerPack(this.uries, "Long" + System.currentTimeMillis(), "HBL" + System.currentTimeMillis());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        for (int i = 0; i < files.size(); i++) {
+            files.get(i).delete();
+        }
     }
 }

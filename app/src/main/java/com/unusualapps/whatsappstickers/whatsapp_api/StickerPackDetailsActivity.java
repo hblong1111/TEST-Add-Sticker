@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.constants.Constants;
 import com.unusualapps.whatsappstickers.utils.FileUtils;
@@ -182,6 +183,7 @@ public class StickerPackDetailsActivity extends AddStickerPackActivity {
         }
     }
 
+    //fixme: check if pack has been added
     static class WhiteListCheckAsyncTask extends AsyncTask<StickerPack, Void, Boolean> {
         private final WeakReference<StickerPackDetailsActivity> stickerPackDetailsActivityWeakReference;
 

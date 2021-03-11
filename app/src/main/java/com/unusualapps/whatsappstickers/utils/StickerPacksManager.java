@@ -35,10 +35,12 @@ public class StickerPacksManager {
         return stickerList;
     }
 
+    //fixme: add sticker in to pack
     private static void saveStickerFilesLocally(Sticker sticker, Uri stickerUri, String stickerPath, Context context) {
         createStickerImageFile(stickerUri, Uri.parse(stickerPath + "/" + sticker.imageFileName), context, Bitmap.CompressFormat.WEBP);
     }
 
+    //fixme: get list pack
     public static List<StickerPack> getStickerPacks(Context context) {
         List<StickerPack> stickerPackList = new ArrayList<>();
 
