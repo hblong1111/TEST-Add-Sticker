@@ -1,6 +1,7 @@
 package com.unusualapps.whatsappstickers.activities;
 
 import android.os.Build;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -18,6 +20,7 @@ import com.github.florent37.depth.animations.ReduceConfiguration;
 import com.sangcomz.fishbun.define.Define;
 import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.backgroundRemover.CutOut;
+import com.unusualapps.whatsappstickers.constants.Constants;
 import com.unusualapps.whatsappstickers.identities.StickerPacksContainer;
 import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
 import com.unusualapps.whatsappstickers.whatsapp_api.AddStickerPackActivity;
@@ -34,6 +37,10 @@ public class MainActivity extends AddStickerPackActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        Log.d("hblong", "RequestPermissionActivity | onCreate: " + Constants.STICKERS_CREATED_DIRECTORY_PATH);
+
         Fresco.initialize(this);
         this.initBottomNavigation();
         this.setupFragments();

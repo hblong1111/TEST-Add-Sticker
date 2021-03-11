@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 import com.unusualapps.whatsappstickers.R;
+import com.unusualapps.whatsappstickers.constants.Constants;
 import com.unusualapps.whatsappstickers.utils.FileUtils;
 import com.unusualapps.whatsappstickers.utils.RequestPermissionsHelper;
 
@@ -15,6 +17,14 @@ public class RequestPermissionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_permission);
+
+
+        //fixme:change path cache
+
+        Constants.STICKERS_DIRECTORY_PATH = getCacheDir().getPath() + "/stickerPacks/";
+        Constants.STICKERS_CREATED_DIRECTORY_PATH = getCacheDir().getPath() + "/stickersCreated/";
+
+
         FileUtils.initializeDirectories(this);
         if (RequestPermissionsHelper.verifyPermissions(this)) {
             startActivity(new Intent(this, MainActivity.class));

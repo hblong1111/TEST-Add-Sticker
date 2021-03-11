@@ -89,6 +89,7 @@ public class TestActivity extends AppCompatActivity {
         }
     }
 
+
     public void chooseImage(View view) {
         FishBun.with(this)
                 .setImageAdapter(new GlideAdapter())
