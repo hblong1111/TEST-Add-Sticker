@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sticker_store_row_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:foreground="?attr/selectableItemBackground"
     android:orientation="vertical"
     android:paddingBottom="4dp"
     android:paddingEnd="16dp"
@@ -24,7 +24,7 @@
         android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/add_button_content_description"
         android:scaleType="center"
-        android:src="@drawable/sticker_3rdparty_add"
+        app:srcCompat="@drawable/sticker_3rdparty_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -92,4 +92,4 @@
         app:layout_constraintTop_toBottomOf="@id/sticker_pack_info" />
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

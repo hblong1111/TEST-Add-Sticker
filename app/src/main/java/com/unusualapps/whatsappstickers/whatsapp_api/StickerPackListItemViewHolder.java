@@ -8,7 +8,7 @@
 
 package com.unusualapps.whatsappstickers.whatsapp_api;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;

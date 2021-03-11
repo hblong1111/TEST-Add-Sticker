@@ -1,11 +1,12 @@
 package com.unusualapps.whatsappstickers.utils;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class RequestPermissionsHelper {
 
@@ -20,7 +21,7 @@ public class RequestPermissionsHelper {
         } else return true;
     }
 
-    public static void requestPermissions(Activity context) {
+    public static void requestPermissions(AppCompatActivity context) {
         ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, CODE_REQUEST_WRITE_READ_EXTERNAL_STORAGE);
     }
 }

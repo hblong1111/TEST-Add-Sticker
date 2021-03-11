@@ -73,7 +73,7 @@
                 tools:replace="android:resource" />
         </provider>
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.easyphotopicker.fileprovider"
             android:enabled="true"
             android:grantUriPermissions="true"

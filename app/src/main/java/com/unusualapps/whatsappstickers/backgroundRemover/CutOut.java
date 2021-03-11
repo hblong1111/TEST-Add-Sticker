@@ -1,12 +1,13 @@
 package com.unusualapps.whatsappstickers.backgroundRemover;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class CutOut {
 
@@ -114,7 +115,7 @@ public class CutOut {
          *
          * @param activity activity to receive result
          */
-        public void start(@NonNull Activity activity) {
+        public void start(@NonNull AppCompatActivity activity) {
             activity.startActivityForResult(getIntent(activity), CUTOUT_ACTIVITY_REQUEST_CODE);
         }
     }

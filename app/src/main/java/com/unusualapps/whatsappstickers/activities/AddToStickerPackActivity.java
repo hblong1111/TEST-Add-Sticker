@@ -1,14 +1,12 @@
 package com.unusualapps.whatsappstickers.activities;
 
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.identities.StickerPacksContainer;
 import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
-
-import java.util.ArrayList;
 
 public class AddToStickerPackActivity extends AppCompatActivity {
 

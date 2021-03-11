@@ -9,18 +9,16 @@
 package com.unusualapps.whatsappstickers.whatsapp_api;
 
 import android.content.*;
-import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.unusualapps.whatsappstickers.BuildConfig;
 import com.unusualapps.whatsappstickers.constants.Constants;
-import com.unusualapps.whatsappstickers.utils.RequestPermissionsHelper;
 import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
 
 import java.io.*;
