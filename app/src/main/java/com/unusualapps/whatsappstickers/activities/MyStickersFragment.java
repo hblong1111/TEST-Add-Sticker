@@ -85,7 +85,7 @@ public class MyStickersFragment extends Fragment {
     public void initButtons() {
         FloatingActionButton floatingActionButtonAdd = view.findViewById(R.id.floating_button_add_sticker_pack);
         floatingActionButtonAdd.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), TestActivity.class);
+            Intent intent = new Intent(getActivity(), NewStickerPackActivity.class);
             startActivity(intent);
         });
     }

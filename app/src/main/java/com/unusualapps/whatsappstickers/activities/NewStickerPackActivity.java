@@ -56,7 +56,7 @@ public class NewStickerPackActivity extends AppCompatActivity {
                     .setDirectoryName("Image Picker")
                     .setMultipleMode(true)
                     .setShowNumberIndicator(true)
-                    .setMaxSize(1)
+                    .setMaxSize(30)
                     .setLimitMessage("You can select up to 10 images")
                     .setRequestCode(CODE_REQUEST)
                     .start();
@@ -151,7 +151,7 @@ public class NewStickerPackActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Define.ALBUM_REQUEST_CODE) {
+        if (requestCode == CODE_REQUEST) {
 
             ArrayList<Uri> uris = new ArrayList<>();
             ArrayList<Image> images = ImagePicker.getImages(data);
