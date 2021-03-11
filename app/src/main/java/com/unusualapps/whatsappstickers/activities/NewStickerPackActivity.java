@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
+import com.nguyenhoanglam.imagepicker.model.Image;
+import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
 import com.sangcomz.fishbun.FishBun;
 import com.sangcomz.fishbun.adapter.image.impl.GlideAdapter;
 import com.sangcomz.fishbun.define.Define;
@@ -32,6 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class NewStickerPackActivity extends AppCompatActivity {
+    private static final int CODE_REQUEST = 200;
     ImageAdapter imageAdapter;
     EditText nameEdit;
     EditText authorEdit;
@@ -46,13 +49,17 @@ public class NewStickerPackActivity extends AppCompatActivity {
         authorEdit = findViewById(R.id.sticker_pack_author_edit);
         Button btnCreate = findViewById(R.id.btn_create_pack);
         btnCreate.setOnClickListener(v -> {
-            FishBun.with(NewStickerPackActivity.this)
-                    .setImageAdapter(new GlideAdapter())
-                    .setMaxCount(30)
-                    .exceptGif(true)
-                    .setActionBarColor(Color.parseColor("#128c7e"), Color.parseColor("#128c7e"), false)
-                    .setMinCount(3).setActionBarTitleColor(Color.parseColor("#ffffff"))
-                    .startAlbum();
+
+            ImagePicker.with(this)
+                    .setFolderMode(true)
+                    .setFolderTitle("Album")
+                    .setDirectoryName("Image Picker")
+                    .setMultipleMode(true)
+                    .setShowNumberIndicator(true)
+                    .setMaxSize(1)
+                    .setLimitMessage("You can select up to 10 images")
+                    .setRequestCode(CODE_REQUEST)
+                    .start();
         });
 
         GridView gridview = findViewById(R.id.sticker_pack_grid_images_preview);
@@ -143,15 +150,19 @@ public class NewStickerPackActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Define.ALBUM_REQUEST_CODE) {
 
-            ArrayList<Uri> uries = new ArrayList<>();
+            ArrayList<Uri> uris = new ArrayList<>();
+            ArrayList<Image> images = ImagePicker.getImages(data);
+            for (int i = 0; i < images.size(); i++) {
+                uris.add(images.get(i).getUri());
+            }
             if (resultCode == RESULT_OK) {
-                uries = data.getParcelableArrayListExtra(Define.INTENT_PATH);
-                if (uries.size() > 0) {
-                    imageAdapter.uries = uries;
+                if (uris.size() > 0) {
+                    imageAdapter.uries = uris;
                     imageAdapter.notifyDataSetChanged();
-                    ((TextView) findViewById(R.id.stickers_selected_textview)).setText(uries.size() + " stickers selected");
+                    ((TextView) findViewById(R.id.stickers_selected_textview)).setText(uris.size() + " stickers selected");
                 }
             }
         }

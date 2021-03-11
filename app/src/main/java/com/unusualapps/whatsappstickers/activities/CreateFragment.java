@@ -9,12 +9,15 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
@@ -23,6 +26,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.nguyenhoanglam.imagepicker.model.Image;
+import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
 import com.sangcomz.fishbun.FishBun;
 import com.sangcomz.fishbun.adapter.image.impl.GlideAdapter;
 import com.sangcomz.fishbun.define.Define;
@@ -35,7 +40,10 @@ import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
 import java.io.File;
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+
 public class CreateFragment extends Fragment {
+    private static final int CODE_REQUEST = 200;
     ImagesGridAdapter imagesGridAdapter;
     View view;
 
@@ -72,14 +80,18 @@ public class CreateFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_create, container, false);
-        view.findViewById(R.id.create_sticker).setOnClickListener(v -> FishBun.with(getActivity())
-                .setImageAdapter(new GlideAdapter())
-                .setMaxCount(1)
-                .exceptGif(true)
-                .setMinCount(1)
-                .setActionBarColor(Color.parseColor("#128c7e"), Color.parseColor("#128c7e"), false)
-                .setActionBarTitleColor(Color.parseColor("#ffffff"))
-                .startAlbum());
+        view.findViewById(R.id.create_sticker).setOnClickListener(v ->
+
+                ImagePicker.with(this)
+                        .setFolderMode(true)
+                        .setFolderTitle("Album")
+                        .setDirectoryName("Image Picker")
+                        .setMultipleMode(false )
+                        .setShowNumberIndicator(true)
+                        .setMaxSize(1)
+                        .setLimitMessage("You can select up to 10 images")
+                        .setRequestCode(CODE_REQUEST)
+                        .start());
         RecyclerView gridview = view.findViewById(R.id.stickers_created_grid);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
         gridview.setLayoutManager(gridLayoutManager);
@@ -110,10 +122,26 @@ public class CreateFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.d("hblong", "CreateFragment | onActivityResult: " + 0);
+        if (requestCode == CODE_REQUEST) {
+
+            ArrayList<Uri> uris = new ArrayList<>();
+            ArrayList<Image> images = ImagePicker.getImages(data);
+            for (int i = 0; i < images.size(); i++) {
+                uris.add(images.get(i).getUri());
+            }
+            if (resultCode == RESULT_OK) {
+                if (uris.size() > 0) {
+                    Log.d("hblong", "CreateFragment | onActivityResult: " + uris.get(0));
+                    CutOut.activity().src(uris.get(0)).intro().start((AppCompatActivity) getActivity());
+                }
+            }
+            return;
+        }
         if (requestCode == CutOut.CUTOUT_ACTIVITY_REQUEST_CODE) {
             switch (resultCode) {
-                case Activity.RESULT_OK:
+                case RESULT_OK:
                     Uri imageUri = CutOut.getUri(data);
                     String stickerName = FileUtils.generateRandomIdentifier();
                     Uri imagePath = Uri.parse(Constants.STICKERS_CREATED_DIRECTORY_PATH + stickerName + ".PNG");
@@ -132,7 +160,7 @@ public class CreateFragment extends Fragment {
             }
         } else if (requestCode == Define.ALBUM_REQUEST_CODE) {
             ArrayList<Uri> uries;
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 uries = data.getParcelableArrayListExtra(Define.INTENT_PATH);
                 CutOut.activity().src(uries.get(0)).intro().start((AppCompatActivity) getActivity());
             }

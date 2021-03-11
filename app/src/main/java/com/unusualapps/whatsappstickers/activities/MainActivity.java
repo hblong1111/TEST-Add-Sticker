@@ -67,10 +67,12 @@ public class MainActivity extends AddStickerPackActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CutOut.CUTOUT_ACTIVITY_REQUEST_CODE || requestCode == Define.ALBUM_REQUEST_CODE) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_principal);
             Objects.requireNonNull(fragment).onActivityResult(requestCode, resultCode, data);
         }
+
     }
 
     private void initBottomNavigation() {
