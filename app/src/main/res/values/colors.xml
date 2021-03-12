@@ -13,7 +13,12 @@
 
     <!--Background remover -->
     <color name="real_black">#b7000000</color>
+    <color name="black">#000000</color>
+    <color name="gray">#99000000</color>
+    <color name="gray50">#4D000000</color>
+    <color name="blue">#2196F3</color>
     <color name="white">#FFFFFF</color>
+    <color name="white50">#80FFFFFF</color>
     <color name="Modal">#b7000000</color>
     <color name="bg_row_background">#ff303e</color>
     <color name="bg_row_foreground">#fcfcfc</color>

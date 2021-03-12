@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.unusualapps.whatsappstickers.R;
-import com.unusualapps.whatsappstickers.activities.MyStickersFragment;
+import com.unusualapps.whatsappstickers.fragment.tutorial.MyStickersFragment;
 import com.unusualapps.whatsappstickers.constants.Constants;
 import com.unusualapps.whatsappstickers.utils.FileUtils;
 import com.unusualapps.whatsappstickers.utils.ImageUtils;

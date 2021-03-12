@@ -1,4 +1,4 @@
-package com.unusualapps.whatsappstickers.activities;
+package com.unusualapps.whatsappstickers.fragment.tutorial;
 
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;

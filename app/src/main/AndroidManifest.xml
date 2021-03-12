@@ -12,14 +12,15 @@
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true"
         android:label="@string/app_name"
         android:launchMode="singleTask"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.TestActivity"></activity>
+        <activity android:name=".activities.HomeActivity"></activity>
+        <activity android:name=".activities.TestActivity" />
         <activity
             android:name=".activities.AddToStickerPackActivity"
             android:label="Add to sticker pack">
@@ -27,7 +28,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-        <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".activities.MainActivity" />
         <activity
             android:name=".backgroundRemover.CutOutActivity"
             android:screenOrientation="portrait"

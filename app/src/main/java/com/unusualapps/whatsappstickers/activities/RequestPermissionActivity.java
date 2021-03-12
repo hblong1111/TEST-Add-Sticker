@@ -27,7 +27,7 @@ public class RequestPermissionActivity extends AppCompatActivity {
 
         FileUtils.initializeDirectories(this);
         if (RequestPermissionsHelper.verifyPermissions(this)) {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, HomeActivity.class));
             this.finish();
         } else {
             RequestPermissionsHelper.requestPermissions(this);
@@ -40,7 +40,7 @@ public class RequestPermissionActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         FileUtils.initializeDirectories(this);
         if (RequestPermissionsHelper.verifyPermissions(this)) {//If the app has all the required permissions we pass to MainActivity to get started
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, HomeActivity.class));
         } else {
             Toast.makeText(this, "We need access to write and read files in your phone", Toast.LENGTH_SHORT).show();
         }

@@ -1,4 +1,4 @@
-package com.unusualapps.whatsappstickers.activities;
+package com.unusualapps.whatsappstickers.fragment.tutorial;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -32,6 +32,7 @@ import com.sangcomz.fishbun.FishBun;
 import com.sangcomz.fishbun.adapter.image.impl.GlideAdapter;
 import com.sangcomz.fishbun.define.Define;
 import com.unusualapps.whatsappstickers.R;
+import com.unusualapps.whatsappstickers.activities.AddToStickerPackActivity;
 import com.unusualapps.whatsappstickers.backgroundRemover.CutOut;
 import com.unusualapps.whatsappstickers.constants.Constants;
 import com.unusualapps.whatsappstickers.utils.FileUtils;

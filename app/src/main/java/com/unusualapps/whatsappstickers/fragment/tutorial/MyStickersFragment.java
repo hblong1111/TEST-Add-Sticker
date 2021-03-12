@@ -1,4 +1,4 @@
-package com.unusualapps.whatsappstickers.activities;
+package com.unusualapps.whatsappstickers.fragment.tutorial;
 
 import androidx.fragment.app.Fragment;
 import android.content.Intent;
@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.unusualapps.whatsappstickers.R;
+import com.unusualapps.whatsappstickers.activities.MainActivity;
+import com.unusualapps.whatsappstickers.activities.NewStickerPackActivity;
 import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
 import com.unusualapps.whatsappstickers.whatsapp_api.StickerPack;
 import com.unusualapps.whatsappstickers.whatsapp_api.StickerPackListAdapter;

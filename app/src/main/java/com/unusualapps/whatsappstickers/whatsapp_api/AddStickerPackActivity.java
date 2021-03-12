@@ -16,12 +16,15 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 import com.unusualapps.whatsappstickers.BuildConfig;
 import com.unusualapps.whatsappstickers.R;
+import com.unusualapps.whatsappstickers.identities.StickerPacksContainer;
+import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
 
 public abstract class AddStickerPackActivity extends BaseActivity {
     public static final int ADD_PACK = 200;
