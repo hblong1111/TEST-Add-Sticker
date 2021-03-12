@@ -13,17 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.unusualapps.whatsappstickers.Event.HomeActivityEvent;
 import com.unusualapps.whatsappstickers.R;
-import com.unusualapps.whatsappstickers.model.Data;
+import com.unusualapps.whatsappstickers.model.Pack;
 import com.unusualapps.whatsappstickers.utils.SpacesItemDecoration;
 
 import java.util.List;
 
 public class PackHomeFragmentAdapter extends RecyclerView.Adapter<PackHomeFragmentAdapter.ViewHolder> {
-    List<Data.Pack> list;
+    List<Pack> list;
 
     private HomeActivityEvent event;
 
-    public PackHomeFragmentAdapter(List<Data.Pack> list, HomeActivityEvent event) {
+    public PackHomeFragmentAdapter(List<Pack> list, HomeActivityEvent event) {
         this.list = list;
         this.event = event;
     }
@@ -36,16 +36,16 @@ public class PackHomeFragmentAdapter extends RecyclerView.Adapter<PackHomeFragme
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Data.Pack pack = list.get(position);
+        Pack pack = list.get(position);
 
         holder.tvAuthor.setText(pack.author);
         holder.tvNamePack.setText(pack.name);
         holder.tvNumberSticker.setText(pack.listSticker.size() + " stickers");
-        holder.rcv.addItemDecoration(new SpacesItemDecoration(8));
-        holder.rcv.setAdapter(new ImageAdapter(pack.listSticker));
+        holder.rcv.setAdapter(new ImageAdapter(pack.listSticker, pack));
         holder.rcv.setLayoutManager(new GridLayoutManager(holder.itemView.getContext(), 5));
 
         holder.btnAdd.setOnClickListener(v -> event.addPackToWhatsApp(pack));
+        holder.itemView.setOnClickListener(v -> event.seeDetailPack(pack));
     }
 
     @Override
@@ -77,10 +77,13 @@ public class PackHomeFragmentAdapter extends RecyclerView.Adapter<PackHomeFragme
 
 
     private class ImageAdapter extends RecyclerView.Adapter<ViewHolder> {
-        List<Data.Pack.ListSticker> list;
+        List<Pack.ListSticker> list;
 
-        public ImageAdapter(List<Data.Pack.ListSticker> list) {
+        private Pack pack;
+
+        public ImageAdapter(List<Pack.ListSticker> list, Pack pack) {
             this.list = list;
+            this.pack = pack;
         }
 
         @NonNull
@@ -93,6 +96,9 @@ public class PackHomeFragmentAdapter extends RecyclerView.Adapter<PackHomeFragme
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Glide.with(holder.imageView.getContext()).load(list.get(position).urlImage).into(holder.imageView);
+
+            holder.imageView.setOnClickListener(v -> event.seeDetailPack(pack));
+
         }
 
         @Override

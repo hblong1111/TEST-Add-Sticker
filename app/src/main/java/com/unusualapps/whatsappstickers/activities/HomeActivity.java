@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.FrameLayout;
 
@@ -24,6 +25,8 @@ import com.unusualapps.whatsappstickers.constants.Constants;
 import com.unusualapps.whatsappstickers.fragment.my.HomeFragment;
 import com.unusualapps.whatsappstickers.identities.StickerPacksContainer;
 import com.unusualapps.whatsappstickers.model.Data;
+import com.unusualapps.whatsappstickers.model.Pack;
+import com.unusualapps.whatsappstickers.utils.Common;
 import com.unusualapps.whatsappstickers.utils.FileUtils;
 import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
 import com.unusualapps.whatsappstickers.whatsapp_api.AddStickerPackActivity;
@@ -83,12 +86,19 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
     }
 
     @Override
-    public void addPackToWhatsApp(Data.Pack pack) {
+    public void addPackToWhatsApp(Pack pack) {
         new TaskGetUriFromUrl().execute(pack);
 
     }
 
-    class TaskGetUriFromUrl extends AsyncTask<Data.Pack, Void, Data.Pack> {
+    @Override
+    public void seeDetailPack(Pack pack) {
+        Intent intent = new Intent(this, PackDetailActivity.class);
+        intent.putExtra(Common.CODE_PUT_PACK, pack);
+        startActivity(intent);
+    }
+
+    class TaskGetUriFromUrl extends AsyncTask<Pack, Void, Pack> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -98,7 +108,7 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
         }
 
         @Override
-        protected Data.Pack doInBackground(Data.Pack... packs) {
+        protected Pack doInBackground(Pack... packs) {
             try {
                 for (int i = 0; i < packs[0].listSticker.size(); i++) {
                     uries.add(Uri.fromFile(saveImageToExternal(getBitmapFromURL(packs[0].listSticker.get(i).urlImage))));
@@ -111,7 +121,7 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
         }
 
         @Override
-        protected void onPostExecute(Data.Pack pack) {
+        protected void onPostExecute(Pack pack) {
             super.onPostExecute(pack);
             saveStickerPack(uries, pack.name, pack.author);
         }

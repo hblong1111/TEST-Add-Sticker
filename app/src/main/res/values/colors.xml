@@ -7,21 +7,16 @@
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#BABABA</color>
     <color name="colorAccent">#128c7e</color>
-    <color name="inactiveAddButtonColor">#B3B3B3</color>
-    <color name="infoPageBackgroundColor">#EBEBEB</color>
-    <color name="actionBarArrowColor">@color/colorAccent</color>
 
     <!--Background remover -->
     <color name="real_black">#b7000000</color>
     <color name="black">#000000</color>
-    <color name="gray">#99000000</color>
+    <color name="green">#4ABC34</color>
+    <color name="tran">#00000000</color>
     <color name="gray50">#4D000000</color>
     <color name="blue">#2196F3</color>
     <color name="white">#FFFFFF</color>
     <color name="white50">#80FFFFFF</color>
-    <color name="Modal">#b7000000</color>
-    <color name="bg_row_background">#ff303e</color>
-    <color name="bg_row_foreground">#fcfcfc</color>
     <color name="intro_magic_background_color">#373737</color>
     <color name="intro_manual_background_color">#E64E4E</color>
     <color name="intro_zoom_background_color">#4E5DE6</color>

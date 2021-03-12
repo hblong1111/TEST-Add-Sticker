@@ -32,7 +32,6 @@
             android:id="@+id/no_stickers_icon">
 
             <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/animation_view"
                 android:layout_width="match_parent"
                 android:layout_height="200sp"
                 android:layout_gravity="center"
