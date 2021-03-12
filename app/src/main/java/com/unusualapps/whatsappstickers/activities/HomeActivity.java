@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
@@ -34,6 +35,7 @@ import com.unusualapps.whatsappstickers.whatsapp_api.Sticker;
 import com.unusualapps.whatsappstickers.whatsapp_api.StickerContentProvider;
 import com.unusualapps.whatsappstickers.whatsapp_api.StickerPack;
 import com.unusualapps.whatsappstickers.whatsapp_api.StickerPackDetailsActivity;
+import com.unusualapps.whatsappstickers.whatsapp_api.WhitelistCheck;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,7 +61,6 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
 
         navBottom = findViewById(R.id.navBottom);
 
-        StickerPacksManager.stickerPacksContainer = new StickerPacksContainer("", "", StickerPacksManager.getStickerPacks(this));
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment(this)).commit();
 
         navBottom.setOnNavigationItemSelectedListener(item -> {
@@ -75,6 +76,7 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
             return true;
         });
 
+        StickerPacksManager.stickerPacksContainer = new StickerPacksContainer("", "", StickerPacksManager.getStickerPacks(this));
         uries = new ArrayList<>();
         files = new ArrayList<>();
         context = this;
@@ -87,7 +89,14 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
 
     @Override
     public void addPackToWhatsApp(Pack pack) {
-        new TaskGetUriFromUrl().execute(pack);
+
+        boolean b = WhitelistCheck.isWhitelisted(this, "." + pack.name+Common.KEY_APP);
+
+        if (!b) {
+            new TaskGetUriFromUrl().execute(pack);
+        }else {
+            Toast.makeText(context, "This package has been added WhatsApp!", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -101,7 +110,7 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
     class TaskGetUriFromUrl extends AsyncTask<Pack, Void, Pack> {
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            super.onPreExecute(); 
             dialog.setMessage("Loading...");
             dialog.show();
             uries.clear();
@@ -139,7 +148,7 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
 
                 //fixme: create pack
 
-                String identifier = "." + FileUtils.generateRandomIdentifier();
+                String identifier = "." + name+Common.KEY_APP;
                 StickerPack stickerPack = new StickerPack(identifier, name, author, Objects.requireNonNull(uries.toArray())[0].toString(), "", "", "", "");
 
                 //Save the sticker images locally and get the list of new stickers for pack
@@ -148,7 +157,8 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
 
                 //Generate image tray icon
                 String stickerPath = Constants.STICKERS_DIRECTORY_PATH + identifier;
-                String trayIconFile = FileUtils.generateRandomIdentifier() + ".png";
+//                String trayIconFile = FileUtils.generateRandomIdentifier() + ".png";
+                String trayIconFile = System.currentTimeMillis()+ ".png";
                 StickerPacksManager.createStickerPackTrayIconFile(uries.get(0), Uri.parse(stickerPath + "/" + trayIconFile), this);
                 stickerPack.trayImageFile = trayIconFile;
 
