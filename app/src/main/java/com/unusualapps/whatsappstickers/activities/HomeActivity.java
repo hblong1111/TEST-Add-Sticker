@@ -90,11 +90,12 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
     @Override
     public void addPackToWhatsApp(Pack pack) {
 
-        boolean b = WhitelistCheck.isWhitelisted(this, "." + pack.name+Common.KEY_APP);
+        boolean b = WhitelistCheck.isWhitelisted(this, "." + pack.name + Common.KEY_APP);
 
         if (!b) {
+            StickerPacksManager.stickerPacksContainer.getStickerPacks().clear();
             new TaskGetUriFromUrl().execute(pack);
-        }else {
+        } else {
             Toast.makeText(context, "This package has been added WhatsApp!", Toast.LENGTH_SHORT).show();
         }
 
@@ -110,7 +111,7 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
     class TaskGetUriFromUrl extends AsyncTask<Pack, Void, Pack> {
         @Override
         protected void onPreExecute() {
-            super.onPreExecute(); 
+            super.onPreExecute();
             dialog.setMessage("Loading...");
             dialog.show();
             uries.clear();
@@ -148,7 +149,7 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
 
                 //fixme: create pack
 
-                String identifier = "." + name+Common.KEY_APP;
+                String identifier = "." + name + Common.KEY_APP;
                 StickerPack stickerPack = new StickerPack(identifier, name, author, Objects.requireNonNull(uries.toArray())[0].toString(), "", "", "", "");
 
                 //Save the sticker images locally and get the list of new stickers for pack
@@ -158,7 +159,7 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
                 //Generate image tray icon
                 String stickerPath = Constants.STICKERS_DIRECTORY_PATH + identifier;
 //                String trayIconFile = FileUtils.generateRandomIdentifier() + ".png";
-                String trayIconFile = System.currentTimeMillis()+ ".png";
+                String trayIconFile = System.currentTimeMillis() + ".png";
                 StickerPacksManager.createStickerPackTrayIconFile(uries.get(0), Uri.parse(stickerPath + "/" + trayIconFile), this);
                 stickerPack.trayImageFile = trayIconFile;
 

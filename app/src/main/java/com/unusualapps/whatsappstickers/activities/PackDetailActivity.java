@@ -132,6 +132,7 @@ public class PackDetailActivity extends AddStickerPackActivity implements View.O
         boolean b = WhitelistCheck.isWhitelisted(this, "." + pack.name + Common.KEY_APP);
 
         if (!b) {
+            StickerPacksManager.stickerPacksContainer.getStickerPacks().clear();
             new TaskGetUriFromUrl().execute(pack);
         } else {
             Toast.makeText(context, "This package has been added WhatsApp!", Toast.LENGTH_SHORT).show();
