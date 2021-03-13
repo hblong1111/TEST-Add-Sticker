@@ -1,10 +1,8 @@
 package com.unusualapps.whatsappstickers.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -37,12 +35,10 @@ import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.adapter.StickerDetailAdapter;
 import com.unusualapps.whatsappstickers.constants.Constants;
 import com.unusualapps.whatsappstickers.identities.StickerPacksContainer;
-import com.unusualapps.whatsappstickers.model.Data;
 import com.unusualapps.whatsappstickers.model.Pack;
 import com.unusualapps.whatsappstickers.utils.Common;
 import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
 import com.unusualapps.whatsappstickers.whatsapp_api.AddStickerPackActivity;
-import com.unusualapps.whatsappstickers.whatsapp_api.BaseActivity;
 import com.unusualapps.whatsappstickers.whatsapp_api.Sticker;
 import com.unusualapps.whatsappstickers.whatsapp_api.StickerContentProvider;
 import com.unusualapps.whatsappstickers.whatsapp_api.StickerPack;
@@ -120,7 +116,7 @@ public class PackDetailActivity extends AddStickerPackActivity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnAddPack:
-                addPack();
+                addPack(pack);
                 break;
             case R.id.btnBack:
                 onBackPressed();
@@ -128,7 +124,7 @@ public class PackDetailActivity extends AddStickerPackActivity implements View.O
         }
     }
 
-    private void addPack() {
+    private void addPack(Pack pack) {
         boolean b = WhitelistCheck.isWhitelisted(this, "." + pack.name + Common.KEY_APP);
 
         if (!b) {
@@ -232,11 +228,40 @@ public class PackDetailActivity extends AddStickerPackActivity implements View.O
         return bitmap;
     }
 
+
     public File saveImageToExternal(Bitmap bm) throws IOException {
         //Create Path to save Image
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES); //Creates app specific folder
         path.mkdirs();
         File imageFile = new File(path, System.currentTimeMillis() + ".jpg"); // Imagename.png
+        FileOutputStream out = new FileOutputStream(imageFile);
+        try {
+            bm.compress(Bitmap.CompressFormat.PNG, 100, out); // Compress Image
+            out.flush();
+            out.close();
+
+            // Tell the media scanner about the new file so that it is
+            // immediately available to the user.
+            MediaScannerConnection.scanFile(context, new String[]{imageFile.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                public void onScanCompleted(String path, Uri uri) {
+                    Log.d("hblong", "TestActivity | onScanCompleted: " + path);
+                    Log.d("hblong", "TestActivity | onScanCompleted: " + uri.toString());
+                }
+            });
+        } catch (Exception e) {
+            throw new IOException();
+        }
+
+        files.add(imageFile);
+        return imageFile;
+    }
+
+    public File saveImageFile(Bitmap bm) throws IOException {
+        //Create Path to save Image
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/" + getString(R.string.app_name)); //Creates app specific folder
+        path.mkdirs();
+        String fileName = pack.name + "-" + pack.author + System.currentTimeMillis() + ".jpg";
+        File imageFile = new File(path, fileName); // Imagename.png
         FileOutputStream out = new FileOutputStream(imageFile);
         try {
             bm.compress(Bitmap.CompressFormat.PNG, 100, out); // Compress Image
@@ -288,8 +313,16 @@ public class PackDetailActivity extends AddStickerPackActivity implements View.O
         tvAuthor.setText(pack.author);
 
         btnBack.setOnClickListener(v -> alertDialog.dismiss());
+        btnAddPack.setOnClickListener(v -> {
+            addPack(pack);
+        });
+        btnSave.setOnClickListener(v -> {
+            new TaskDownloadImage().execute(listSticker.urlImage);
+        });
 
-        //todo: save, share and add sticker
+        btnShare.setOnClickListener(v -> {
+            //todo: share app
+        });
 
 
         int width = getResources().getDisplayMetrics().widthPixels;
@@ -307,5 +340,27 @@ public class PackDetailActivity extends AddStickerPackActivity implements View.O
         alertDialog.show();
         alertDialog.getWindow().setAttributes(lp);
     }
+
+    class TaskDownloadImage extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+
+            Bitmap bitmap = getBitmapFromURL(strings[0]);
+            File file = null;
+            try {
+                file = saveImageFile(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return file.exists() ? "Save success!" : "Error";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

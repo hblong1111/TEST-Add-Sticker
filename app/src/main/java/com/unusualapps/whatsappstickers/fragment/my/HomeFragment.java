@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,8 @@ import com.unusualapps.whatsappstickers.Event.HomeActivityEvent;
 import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.adapter.PackHomeFragmentAdapter;
 import com.unusualapps.whatsappstickers.model.Data;
+import com.unusualapps.whatsappstickers.view_model.HomeActivityViewModel;
+import com.unusualapps.whatsappstickers.view_model.ViewModelFactory;
 
 public class HomeFragment extends Fragment {
     private RecyclerView rcv;
@@ -25,6 +28,14 @@ public class HomeFragment extends Fragment {
     Data data;
 
     PackHomeFragmentAdapter adapter;
+    private static HomeFragment INSTANCE;
+
+    public static HomeFragment getInstance(HomeActivityEvent event) {
+        if (INSTANCE == null) {
+            INSTANCE = new HomeFragment(event);
+        }
+        return INSTANCE;
+    }
 
     public HomeFragment(HomeActivityEvent event) {
         this.event = event;
@@ -35,6 +46,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_home, container, false);
 
+        init(view);
+
+        return view;
+    }
+
+    private void init(View view) {
+
         rcv = view.findViewById(R.id.rcv);
 
         data = new Gson().fromJson(getString(R.string.data), Data.class);
@@ -43,7 +61,5 @@ public class HomeFragment extends Fragment {
 
         rcv.setAdapter(adapter);
         rcv.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        return view;
     }
 }

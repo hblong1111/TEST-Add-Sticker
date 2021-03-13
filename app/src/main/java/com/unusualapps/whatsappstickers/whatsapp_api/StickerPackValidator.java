@@ -33,7 +33,8 @@ public class StickerPackValidator {
     private static final int EMOJI_LIMIT = 3;
     private static final int IMAGE_HEIGHT = 512;
     private static final int IMAGE_WIDTH = 512;
-    private static final int STICKER_SIZE_MIN = 3;
+    //fixme: min sticker
+    private static final int STICKER_SIZE_MIN = 0;
     private static final int STICKER_SIZE_MAX = 30;
     private static final int CHAR_COUNT_MAX = 128;
     private static final long ONE_KIBIBYTE = 8 * 1024;

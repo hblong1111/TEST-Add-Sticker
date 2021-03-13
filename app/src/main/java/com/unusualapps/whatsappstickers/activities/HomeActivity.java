@@ -1,6 +1,7 @@
 package com.unusualapps.whatsappstickers.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -23,13 +24,18 @@ import com.google.gson.Gson;
 import com.unusualapps.whatsappstickers.Event.HomeActivityEvent;
 import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.constants.Constants;
+import com.unusualapps.whatsappstickers.db.AppDatabase;
+import com.unusualapps.whatsappstickers.db.DatabaseModule;
 import com.unusualapps.whatsappstickers.fragment.my.HomeFragment;
+import com.unusualapps.whatsappstickers.fragment.my.PackCustomFragment;
 import com.unusualapps.whatsappstickers.identities.StickerPacksContainer;
 import com.unusualapps.whatsappstickers.model.Data;
 import com.unusualapps.whatsappstickers.model.Pack;
 import com.unusualapps.whatsappstickers.utils.Common;
 import com.unusualapps.whatsappstickers.utils.FileUtils;
 import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
+import com.unusualapps.whatsappstickers.view_model.HomeActivityViewModel;
+import com.unusualapps.whatsappstickers.view_model.ViewModelFactory;
 import com.unusualapps.whatsappstickers.whatsapp_api.AddStickerPackActivity;
 import com.unusualapps.whatsappstickers.whatsapp_api.Sticker;
 import com.unusualapps.whatsappstickers.whatsapp_api.StickerContentProvider;
@@ -54,22 +60,29 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
 
     ProgressDialog dialog;
 
+    AppDatabase db;
+    private HomeActivityViewModel model;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        db = DatabaseModule.getInstance(getApplication());
+        model = new ViewModelProvider(this, new ViewModelFactory()).get(HomeActivityViewModel.class);
+
+
         navBottom = findViewById(R.id.navBottom);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment(this)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,   HomeFragment.getInstance(this)).commit();
 
         navBottom.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menu_home:
-
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container,   HomeFragment.getInstance(this)).commit();
                     break;
                 case R.id.menu_create:
-
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container,  PackCustomFragment.getInstance(this)).commit();
                     break;
             }
 
@@ -84,6 +97,7 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
 
         dialog = new ProgressDialog(context);
         dialog.setCancelable(false);
+
 
     }
 
@@ -106,6 +120,11 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
         Intent intent = new Intent(this, PackDetailActivity.class);
         intent.putExtra(Common.CODE_PUT_PACK, pack);
         startActivity(intent);
+    }
+
+    @Override
+    public void getListPackLocal() {
+        model.getListPackLocal(db);
     }
 
     class TaskGetUriFromUrl extends AsyncTask<Pack, Void, Pack> {
