@@ -15,12 +15,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
+
 import android.util.Log;
 import android.widget.Toast;
+
 import com.unusualapps.whatsappstickers.BuildConfig;
 import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.identities.StickerPacksContainer;
@@ -61,7 +64,10 @@ public abstract class AddStickerPackActivity extends BaseActivity {
                 }
             }
         }
+        deleteListFileCache();
     }
+
+    protected abstract void deleteListFileCache();
 
     public static final class StickerPackNotAddedMessageFragment extends DialogFragment {
         @NonNull

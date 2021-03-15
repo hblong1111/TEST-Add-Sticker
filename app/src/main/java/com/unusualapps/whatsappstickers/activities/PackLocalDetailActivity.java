@@ -21,12 +21,14 @@ import android.widget.Toast;
 
 import com.nguyenhoanglam.imagepicker.model.Image;
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
+import com.theartofdev.edmodo.cropper.CropImage;
 import com.unusualapps.whatsappstickers.Event.PackLocalDetailEvent;
 import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.adapter.StickerLocalAdapter;
 import com.unusualapps.whatsappstickers.backgroundRemover.CutOut;
 import com.unusualapps.whatsappstickers.db.AppDatabase;
 import com.unusualapps.whatsappstickers.db.DatabaseModule;
+import com.unusualapps.whatsappstickers.image_edit.EditImageActivity;
 import com.unusualapps.whatsappstickers.model.db_local.PackLocal;
 import com.unusualapps.whatsappstickers.model.db_local.StickerLocal;
 import com.unusualapps.whatsappstickers.utils.Common;
@@ -39,6 +41,7 @@ import java.util.List;
 
 public class PackLocalDetailActivity extends AppCompatActivity implements View.OnClickListener, PackLocalDetailEvent {
     private static final int CODE_REQUEST = 200;
+    private static final int REQUEST_CODE_EDIT = 564;
     private ImageButton btnBack;
     private LinearLayout btnAddPack;
     private ImageView img;
@@ -72,7 +75,7 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
 
         listSticker = db.stickerDao().getAll();
 
-        adapter = new StickerLocalAdapter(listSticker,this);
+        adapter = new StickerLocalAdapter(listSticker, this);
 
         initView();
 
@@ -177,7 +180,7 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
                     .setFolderMode(true)
                     .setFolderTitle("Album")
                     .setDirectoryName("Image Picker")
-                    .setMultipleMode(false )
+                    .setMultipleMode(false)
                     .setShowNumberIndicator(true)
 //                    .setMaxSize(1)
 //                    .setLimitMessage("You can select up to 10 images")
@@ -199,17 +202,33 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
             if (resultCode == RESULT_OK) {
                 if (uris.size() > 0) {
                     Log.d("hblong", "CreateFragment | onActivityResult: " + uris.get(0));
-                    CutOut.activity().src(uris.get(0)).intro().start(this);
+//                    CutOut.activity().src(uris.get(0)).intro().start(this);
+                    CropImage.activity(uris.get(0))
+                            .setAspectRatio(1, 1)
+                            .start(this);
                 }
             }
             return;
         }
-        if (requestCode == CutOut.CUTOUT_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                Uri imageUri = CutOut.getUri(data);
-
-                startActivity(new Intent(PackLocalDetailActivity.this,AddTextActivity.class).putExtra(Common.CODE_PUT_PACK,imageUri.toString()));
+                Uri resultUri = result.getUri();
+                Log.d("hblong", "PackLocalDetailActivity | onActivityResult: " + resultUri.toString());
+                startActivityForResult(new Intent(this, EditImageActivity.class).setData(resultUri), REQUEST_CODE_EDIT);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
         }
+
+        if (requestCode == REQUEST_CODE_EDIT) {
+            if (resultCode == RESULT_OK) {
+                ImageView imgTest;
+
+                imgTest = findViewById(R.id.imgTest);
+                imgTest.setImageURI(data.getData());
+            }
+        }
+
     }
 }

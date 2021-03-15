@@ -19,7 +19,12 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.AddTextActivity"></activity>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity android:name=".image_edit.EditImageActivity">
+
+        </activity>
+
         <activity android:name=".activities.PackLocalDetailActivity" />
         <activity android:name=".activities.CreateNewPackLocalActivity" />
         <activity android:name=".activities.PackDetailActivity" />
@@ -40,10 +45,6 @@
         <activity
             android:name=".backgroundRemover.IntroActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyBaseTheme" />
         <activity
             android:name=".whatsapp_api.StickerPackDetailsActivity"
             android:parentActivityName=".activities.MainActivity"

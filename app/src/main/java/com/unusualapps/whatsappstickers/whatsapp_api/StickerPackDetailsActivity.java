@@ -182,6 +182,11 @@ public class StickerPackDetailsActivity extends AddStickerPackActivity {
         }
     }
 
+    @Override
+    protected void deleteListFileCache() {
+
+    }
+
     //fixme: check if pack has been added
     static class WhiteListCheckAsyncTask extends AsyncTask<StickerPack, Void, Boolean> {
         private final WeakReference<StickerPackDetailsActivity> stickerPackDetailsActivityWeakReference;

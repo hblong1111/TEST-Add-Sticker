@@ -136,6 +136,11 @@ public class PackDetailActivity extends AddStickerPackActivity implements View.O
         }
     }
 
+    @Override
+    protected void deleteListFileCache() {
+
+    }
+
 
     class TaskGetUriFromUrl extends AsyncTask<Pack, Void, Pack> {
         @Override

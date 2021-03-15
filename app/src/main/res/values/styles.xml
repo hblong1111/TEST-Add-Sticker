@@ -17,6 +17,15 @@
 
     </style>
 
+
+    <style name="EditText">
+        <item name="android:singleLine">true</item>
+        <item name="colorControlNormal">#FFFFFF</item>
+        <item name="colorControlActivated">#FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="AppThemeWithOutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/googlesans_regular</item>

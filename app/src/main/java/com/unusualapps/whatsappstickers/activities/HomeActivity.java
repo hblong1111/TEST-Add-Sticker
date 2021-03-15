@@ -48,6 +48,8 @@ import com.unusualapps.whatsappstickers.whatsapp_api.WhitelistCheck;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +144,12 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
         model.getListPackLocal(db);
     }
 
+    //remove file cache
+    @Override
+    protected void deleteListFileCache() {
+        StickerPacksManager.deleteStickerPack(0);
+    }
+
     class TaskGetUriFromUrl extends AsyncTask<Pack, Void, Pack> {
         @Override
         protected void onPreExecute() {
@@ -207,6 +215,8 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            Log.d("hblong", "HomeActivity | saveStickerPack: 1111111");
 
             for (int i = 0; i < files.size(); i++) {
                 files.get(i).delete();

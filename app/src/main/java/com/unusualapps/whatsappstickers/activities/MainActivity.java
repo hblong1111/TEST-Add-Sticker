@@ -78,6 +78,11 @@ public class MainActivity extends AddStickerPackActivity {
 
     }
 
+    @Override
+    protected void deleteListFileCache() {
+
+    }
+
     private void initBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
