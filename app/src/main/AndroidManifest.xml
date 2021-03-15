@@ -19,7 +19,9 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.PackDetailActivity"></activity>
+        <activity android:name=".activities.PackLocalDetailActivity"></activity>
+        <activity android:name=".activities.CreateNewPackLocalActivity" />
+        <activity android:name=".activities.PackDetailActivity" />
         <activity android:name=".activities.HomeActivity" />
         <activity android:name=".activities.TestActivity" />
         <activity

@@ -1,5 +1,6 @@
 package com.unusualapps.whatsappstickers.fragment.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.unusualapps.whatsappstickers.Event.HomeActivityEvent;
 import com.unusualapps.whatsappstickers.R;
+import com.unusualapps.whatsappstickers.activities.CreateNewPackLocalActivity;
 import com.unusualapps.whatsappstickers.db.AppDatabase;
 import com.unusualapps.whatsappstickers.db.DatabaseModule;
 import com.unusualapps.whatsappstickers.model.db_local.PackLocal;
@@ -25,7 +27,7 @@ import com.unusualapps.whatsappstickers.view_model.ViewModelFactory;
 
 import java.util.List;
 
-public class PackCustomFragment extends Fragment {
+public class PackCustomFragment extends Fragment implements View.OnClickListener {
 
     private ImageButton btnSetting;
     private Group grEmpty;
@@ -40,7 +42,7 @@ public class PackCustomFragment extends Fragment {
     HomeActivityEvent event;
 
 
-    private static   PackCustomFragment INSTANCE  ;
+    private static PackCustomFragment INSTANCE;
 
     public static PackCustomFragment getInstance(HomeActivityEvent event) {
         if (INSTANCE == null) {
@@ -91,5 +93,36 @@ public class PackCustomFragment extends Fragment {
         btnCreatePack2 = view.findViewById(R.id.btnCreatePack2);
         rcv = view.findViewById(R.id.rcv);
         grSize = view.findViewById(R.id.grSize);
+
+        btnCreatePack.setOnClickListener(this);
+        btnCreatePack2.setOnClickListener(this);
+        btnSetting.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnCreatePack:
+            case R.id.btnCreatePack2:
+                createNewPack();
+                break;
+            case R.id.btnSetting:
+                settingApp();
+                break;
+        }
+    }
+
+    private void settingApp() {
+
+    }
+
+    private void createNewPack() {
+        startActivity(new Intent(getContext(), CreateNewPackLocalActivity.class));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        model.getListPackLocal(DatabaseModule.getInstance(getActivity().getApplication()));
     }
 }

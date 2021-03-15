@@ -16,8 +16,12 @@ public interface PackDao {
 
 
     @Insert
-    void insertAll(PackLocal packLocal);
+    long insert(PackLocal packLocal);
 
     @Delete
     void delete(PackLocal packLocal);
+
+    @Delete
+    void deleteAll(List<PackLocal> packLocals);
+
 }

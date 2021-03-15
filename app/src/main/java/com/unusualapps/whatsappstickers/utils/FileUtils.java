@@ -19,6 +19,19 @@ import java.util.Random;
 
 public class FileUtils {
 
+    public static boolean checkCache(Context context) {
+
+        File file = new File(context.getCacheDir(), "check.txt");
+        if (file.exists()) {
+            Log.d("hblong", "FileUtils | checkCache: " + "file ok");
+            return true;
+
+        } else {
+            Log.d("hblong", "FileUtils | checkCache: " + "not file");
+            file.mkdirs();
+            return false;
+        }
+    }
     public static String generateRandomIdentifier() {
         String possibilities = "abcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();

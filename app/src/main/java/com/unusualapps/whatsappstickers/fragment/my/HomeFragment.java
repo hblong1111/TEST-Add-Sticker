@@ -62,4 +62,5 @@ public class HomeFragment extends Fragment {
         rcv.setAdapter(adapter);
         rcv.setLayoutManager(new LinearLayoutManager(getContext()));
     }
+
 }

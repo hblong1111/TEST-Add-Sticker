@@ -37,6 +37,7 @@ import com.unusualapps.whatsappstickers.constants.Constants;
 import com.unusualapps.whatsappstickers.identities.StickerPacksContainer;
 import com.unusualapps.whatsappstickers.model.Pack;
 import com.unusualapps.whatsappstickers.utils.Common;
+import com.unusualapps.whatsappstickers.utils.FileUtils;
 import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
 import com.unusualapps.whatsappstickers.whatsapp_api.AddStickerPackActivity;
 import com.unusualapps.whatsappstickers.whatsapp_api.Sticker;

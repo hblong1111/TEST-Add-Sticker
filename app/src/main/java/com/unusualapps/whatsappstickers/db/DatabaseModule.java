@@ -11,7 +11,7 @@ public class DatabaseModule {
     public static AppDatabase getInstance(Application application) {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(application,
-                    AppDatabase.class, "database-name")
+                    AppDatabase.class, "hblong.db")
                     .allowMainThreadQueries()
                     .build();
         }

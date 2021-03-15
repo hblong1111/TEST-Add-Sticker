@@ -31,6 +31,8 @@ import com.unusualapps.whatsappstickers.fragment.my.PackCustomFragment;
 import com.unusualapps.whatsappstickers.identities.StickerPacksContainer;
 import com.unusualapps.whatsappstickers.model.Data;
 import com.unusualapps.whatsappstickers.model.Pack;
+import com.unusualapps.whatsappstickers.model.db_local.PackLocal;
+import com.unusualapps.whatsappstickers.model.db_local.StickerLocal;
 import com.unusualapps.whatsappstickers.utils.Common;
 import com.unusualapps.whatsappstickers.utils.FileUtils;
 import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
@@ -71,18 +73,20 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
         db = DatabaseModule.getInstance(getApplication());
         model = new ViewModelProvider(this, new ViewModelFactory()).get(HomeActivityViewModel.class);
 
+        getListPackLocal();
+
 
         navBottom = findViewById(R.id.navBottom);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,   HomeFragment.getInstance(this)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, HomeFragment.getInstance(this)).commit();
 
         navBottom.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menu_home:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container,   HomeFragment.getInstance(this)).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, HomeFragment.getInstance(this)).commit();
                     break;
                 case R.id.menu_create:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container,  PackCustomFragment.getInstance(this)).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, PackCustomFragment.getInstance(this)).commit();
                     break;
             }
 
@@ -98,8 +102,19 @@ public class HomeActivity extends AddStickerPackActivity implements HomeActivity
         dialog = new ProgressDialog(context);
         dialog.setCancelable(false);
 
+        /*kiểm tra xem người dùng có  xóa cache không */
+        if (!FileUtils.checkCache(this)) {
+            List<PackLocal> packLocals = db.packDao().getAll();
+            List<StickerLocal> stickerLocals = db.stickerDao().getAll();
+
+            if (packLocals.size() > 0 || stickerLocals.size() > 0) {
+                db.packDao().deleteAll(packLocals);
+                db.stickerDao().deleteAll(stickerLocals);
+            }
+        }
 
     }
+
 
     @Override
     public void addPackToWhatsApp(Pack pack) {

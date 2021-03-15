@@ -11,6 +11,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(HomeActivityViewModel.class)) {
             return (T) new HomeActivityViewModel();
         }
+        if (modelClass.isAssignableFrom(PackLocalDetailActivityViewModel.class)) {
+            return (T) new PackLocalDetailActivityViewModel();
+        }
         return null;
     }
 }
