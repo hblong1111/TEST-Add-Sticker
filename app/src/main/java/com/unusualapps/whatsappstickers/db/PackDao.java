@@ -15,6 +15,9 @@ public interface PackDao {
     @Query("SELECT * FROM PackLocal")
     List<PackLocal> getAll();
 
+    @Query("SELECT * FROM PackLocal where id=:id")
+    PackLocal findById(int id);
+
 
     @Insert
     long insert(PackLocal packLocal);

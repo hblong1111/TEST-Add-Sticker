@@ -84,5 +84,7 @@ dependencies {
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
 
+    implementation 'ja.burhanrashid52:photoeditor:1.1.1'
+
 
 }

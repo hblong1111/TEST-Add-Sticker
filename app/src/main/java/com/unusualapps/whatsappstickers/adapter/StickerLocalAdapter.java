@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.unusualapps.whatsappstickers.Event.PackLocalDetailEvent;
 import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.model.db_local.StickerLocal;
 
@@ -16,9 +17,11 @@ import java.util.List;
 
 public class StickerLocalAdapter extends RecyclerView.Adapter<  StickerLocalAdapter.ViewHolder> {
     List<StickerLocal> list;
+    PackLocalDetailEvent event;
 
-    public StickerLocalAdapter(List<StickerLocal> list) {
+    public StickerLocalAdapter(List<StickerLocal> list, PackLocalDetailEvent event) {
         this.list = list;
+        this.event = event;
     }
 
     @Override
@@ -48,6 +51,8 @@ public class StickerLocalAdapter extends RecyclerView.Adapter<  StickerLocalAdap
                 Toast.makeText(v.getContext(), "add new sticker", Toast.LENGTH_SHORT).show();
             });
         }
+
+        holder.itemView.setOnClickListener(v -> event.itemClick(position));
     }
 
     @Override

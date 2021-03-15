@@ -29,6 +29,8 @@ import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.unusualapps.whatsappstickers.R;
+import com.unusualapps.whatsappstickers.utils.Common;
+
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 import top.defaults.checkerboarddrawable.CheckerboardDrawable;
@@ -205,12 +207,14 @@ public class CutOutActivity extends AppCompatActivity {
         }
     }
 
+    //fixme: set result CutOut activity
     private void startSaveDrawingTask() {
         SaveDrawingTask task = new SaveDrawingTask(this);
 
         int borderColor;
         if ((borderColor = getIntent().getIntExtra(CutOut.CUTOUT_EXTRA_BORDER_COLOR, -1)) != -1) {
             Bitmap image = BitmapUtility.getBorderedBitmap(this.drawView.getDrawingCache(), borderColor, BORDER_SIZE);
+
             task.execute(image);
         } else {
             task.execute(this.drawView.getDrawingCache());
