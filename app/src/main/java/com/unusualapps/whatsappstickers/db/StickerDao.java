@@ -20,12 +20,12 @@ public interface StickerDao {
 
 
     @Insert
-    void insertAll(StickerLocal stickerLocal);
+    void insert(StickerLocal stickerLocal);
 
     @Delete
     void delete(StickerLocal stickerLocal);
 
 
     @Delete
-    void deleteAll(List<StickerLocal> packLocals);
+    void deleteAll(List<StickerLocal> stickerLocals);
 }

@@ -13,7 +13,7 @@ public class PackLocalDetailActivityViewModel extends ViewModel {
     private MutableLiveData<PackLocal> packLocal = new MutableLiveData<>();
     private MutableLiveData<List<StickerLocal>> stickerLocal = new MutableLiveData<>();
 
-    public void getListSticker(AppDatabase db) {
+    public void getListSticker(AppDatabase db,int id) {
         List<StickerLocal> list = db.stickerDao().getAll();
         stickerLocal.postValue(list);
     }

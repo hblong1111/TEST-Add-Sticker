@@ -21,6 +21,10 @@ public class PackLocal implements Serializable {
         this.author = author;
     }
 
+    public PackLocal(int idPack) {
+        id = idPack;
+    }
+
     public int getId() {
         return id;
     }

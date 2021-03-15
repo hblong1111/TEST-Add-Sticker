@@ -138,7 +138,7 @@ public class PackDetailActivity extends AddStickerPackActivity implements View.O
 
     @Override
     protected void deleteListFileCache() {
-
+        StickerPacksManager.deleteStickerPack(0);
     }
 
 

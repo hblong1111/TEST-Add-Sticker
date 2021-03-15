@@ -22,6 +22,7 @@ import com.unusualapps.whatsappstickers.db.DatabaseModule;
 import com.unusualapps.whatsappstickers.model.db_local.PackLocal;
 import com.unusualapps.whatsappstickers.model.db_local.StickerLocal;
 import com.unusualapps.whatsappstickers.utils.Common;
+import com.unusualapps.whatsappstickers.utils.StickerPackLocalUtils;
 
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class PackLocalAdapter extends RecyclerView.Adapter<PackLocalAdapter.View
                         v.getContext().startActivity(intent);
                         break;
                     case R.id.item_delete_pack:
-                        db.packDao().delete(packLocal);
+                        StickerPackLocalUtils.deletePackLocal(db,packLocal.getId());
                         list.remove(position);
                         notifyDataSetChanged();
                         break;

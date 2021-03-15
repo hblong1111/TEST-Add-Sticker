@@ -68,18 +68,21 @@ public class StickerPacksManager {
         }
     }
 
-    public static void createStickerImageFile(Uri sourceUri, Uri destinyUri, Context context, Bitmap.CompressFormat format) {
+    public static Uri createStickerImageFile(Uri sourceUri, Uri destinyUri, Context context, Bitmap.CompressFormat format) {
         String destinationFilename = destinyUri.getPath();
         try {
             File file = new File(destinationFilename);
+            file.createNewFile();
             byte[] bitmapdata = ImageUtils.compressImageToBytes(sourceUri, 70, 512, 512, context, format);
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(bitmapdata);
             fos.flush();
             fos.close();
+            return Uri.fromFile(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public static void createStickerPackTrayIconFile(Uri sourceUri, Uri destinyUri, Context context) {

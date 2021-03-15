@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class ImageUtils {
 
-    static byte[] compressImageToBytes(Uri imageUri, int quality, int height, int width, Context context, Bitmap.CompressFormat format) throws IOException {
+    public static byte[] compressImageToBytes(Uri imageUri, int quality, int height, int width, Context context, Bitmap.CompressFormat format) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = null;
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
