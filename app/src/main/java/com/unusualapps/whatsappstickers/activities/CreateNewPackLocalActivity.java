@@ -23,6 +23,12 @@ public class CreateNewPackLocalActivity extends AppCompatActivity implements Vie
     private EditText edtName;
     private EditText edtAuthor;
     private String txtError;
+    private TextView tvTitle;
+
+
+    private boolean isEdit;
+
+    private PackLocal packLocal;
 
 
     @Override
@@ -35,9 +41,23 @@ public class CreateNewPackLocalActivity extends AppCompatActivity implements Vie
         btnCreate = findViewById(R.id.btnCreate);
         edtName = findViewById(R.id.edtName);
         edtAuthor = findViewById(R.id.edtAuthor);
+        tvTitle = findViewById(R.id.tvTitle);
+
 
         btnClose.setOnClickListener(this);
         btnCreate.setOnClickListener(this);
+
+        packLocal = (PackLocal) getIntent().getSerializableExtra(Common.CODE_PUT_PACK);
+
+        isEdit = packLocal != null;
+
+        if (isEdit) {
+            tvTitle.setText("Edit Pack");
+            btnCreate.setText("Save");
+
+            edtAuthor.setText(packLocal.getAuthor());
+            edtName.setText(packLocal.getName());
+        }
 
     }
 
@@ -61,8 +81,17 @@ public class CreateNewPackLocalActivity extends AppCompatActivity implements Vie
         String name = edtName.getText().toString();
         String author = edtAuthor.getText().toString();
 
-        PackLocal packLocal = new PackLocal(0, name, author);
 
+        if (isEdit) {
+            this.packLocal.setName(name);
+            this.packLocal.setAuthor(author);
+            DatabaseModule.getInstance(getApplication()).packDao().update(this.packLocal);
+            onBackPressed();
+            finish();
+            return;
+        }
+
+        PackLocal packLocal = new PackLocal(0, name, author);
         long idPack = DatabaseModule.getInstance(getApplication()).packDao().insert(packLocal);
 
 

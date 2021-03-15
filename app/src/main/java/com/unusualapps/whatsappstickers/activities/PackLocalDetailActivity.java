@@ -3,6 +3,7 @@ package com.unusualapps.whatsappstickers.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -66,6 +67,9 @@ public class PackLocalDetailActivity extends AppCompatActivity {
 
         tvName.setText(packLocal.getName());
         tvAuthor.setText(packLocal.getAuthor());
+
+        rcv.setAdapter(adapter);
+        rcv.setLayoutManager(new GridLayoutManager(this, 4));
 
         model.getStickerLocal().observe(this, packLocal1 -> {
             tvName.setText(packLocal.getName());

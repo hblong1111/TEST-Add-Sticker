@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.unusualapps.whatsappstickers.model.db_local.PackLocal;
 
@@ -20,6 +21,9 @@ public interface PackDao {
 
     @Delete
     void delete(PackLocal packLocal);
+
+    @Update
+    void update(PackLocal packLocal);
 
     @Delete
     void deleteAll(List<PackLocal> packLocals);

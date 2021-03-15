@@ -14,17 +14,21 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.unusualapps.whatsappstickers.Event.HomeActivityEvent;
 import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.activities.CreateNewPackLocalActivity;
+import com.unusualapps.whatsappstickers.adapter.PackLocalAdapter;
 import com.unusualapps.whatsappstickers.db.AppDatabase;
 import com.unusualapps.whatsappstickers.db.DatabaseModule;
 import com.unusualapps.whatsappstickers.model.db_local.PackLocal;
 import com.unusualapps.whatsappstickers.view_model.HomeActivityViewModel;
 import com.unusualapps.whatsappstickers.view_model.ViewModelFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PackCustomFragment extends Fragment implements View.OnClickListener {
@@ -40,6 +44,9 @@ public class PackCustomFragment extends Fragment implements View.OnClickListener
 
     HomeActivityViewModel model;
     HomeActivityEvent event;
+    PackLocalAdapter adapter;
+
+    List<PackLocal> list;
 
 
     private static PackCustomFragment INSTANCE;
@@ -66,6 +73,10 @@ public class PackCustomFragment extends Fragment implements View.OnClickListener
 
         model.getListPackLocal().observe(getActivity(), packLocals -> {
             updateView(packLocals);
+
+            list.clear();
+            list.addAll(packLocals);
+            adapter.notifyDataSetChanged();
         });
         return view;
     }
@@ -84,6 +95,12 @@ public class PackCustomFragment extends Fragment implements View.OnClickListener
         db = DatabaseModule.getInstance(getActivity().getApplication());
 
         model = new ViewModelProvider(getActivity(), new ViewModelFactory()).get(HomeActivityViewModel.class);
+
+        list = new ArrayList<>();
+        adapter = new PackLocalAdapter(list, db);
+        rcv.setAdapter(adapter);
+        rcv.setLayoutManager(new LinearLayoutManager(getContext()));
+
     }
 
     private void initView(View view) {
