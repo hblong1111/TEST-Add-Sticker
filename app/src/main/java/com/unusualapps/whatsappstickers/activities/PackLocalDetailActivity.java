@@ -7,7 +7,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,6 +31,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.nguyenhoanglam.imagepicker.model.Image;
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -38,6 +42,7 @@ import com.unusualapps.whatsappstickers.backgroundRemover.CutOut;
 import com.unusualapps.whatsappstickers.constants.Constants;
 import com.unusualapps.whatsappstickers.db.AppDatabase;
 import com.unusualapps.whatsappstickers.db.DatabaseModule;
+import com.unusualapps.whatsappstickers.identities.StickerPacksContainer;
 import com.unusualapps.whatsappstickers.image_edit.EditImageActivity;
 import com.unusualapps.whatsappstickers.model.db_local.PackLocal;
 import com.unusualapps.whatsappstickers.model.db_local.StickerLocal;
@@ -48,17 +53,23 @@ import com.unusualapps.whatsappstickers.utils.StickerPackLocalUtils;
 import com.unusualapps.whatsappstickers.utils.StickerPacksManager;
 import com.unusualapps.whatsappstickers.view_model.PackLocalDetailActivityViewModel;
 import com.unusualapps.whatsappstickers.view_model.ViewModelFactory;
+import com.unusualapps.whatsappstickers.whatsapp_api.AddStickerPackActivity;
+import com.unusualapps.whatsappstickers.whatsapp_api.Sticker;
+import com.unusualapps.whatsappstickers.whatsapp_api.StickerContentProvider;
+import com.unusualapps.whatsappstickers.whatsapp_api.StickerPack;
+import com.unusualapps.whatsappstickers.whatsapp_api.WhitelistCheck;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.unusualapps.whatsappstickers.fragment.tutorial.CreateFragment.addImageToGallery;
 
-public class PackLocalDetailActivity extends AppCompatActivity implements View.OnClickListener, PackLocalDetailEvent {
-    private static final int CODE_REQUEST = 200;
+public class PackLocalDetailActivity extends AddStickerPackActivity implements View.OnClickListener, PackLocalDetailEvent {
+    private static final int CODE_REQUEST = 645;
     private static final int REQUEST_CODE_EDIT = 564;
     private ImageButton btnBack;
     private LinearLayout btnAddPack;
@@ -80,18 +91,27 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
     StickerLocalAdapter adapter;
     private Dialog alertDialog;
 
+    //add to whatsapp
+    private List<Uri> uriList;
+    private Context context;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pack_local_detail);
 
+        context = this;
+
         model = new ViewModelProvider(this, new ViewModelFactory()).get(PackLocalDetailActivityViewModel.class);
 
         packLocal = (PackLocal) getIntent().getSerializableExtra(Common.CODE_PUT_PACK);
 
+        StickerPacksManager.stickerPacksContainer = new StickerPacksContainer("", "", StickerPacksManager.getStickerPacks(this));
+
         db = DatabaseModule.getInstance(getApplication());
 
+        uriList = new ArrayList<>();
         listSticker = new ArrayList<>();
         adapter = new StickerLocalAdapter(listSticker, this);
 
@@ -105,6 +125,11 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
         rcv.setLayoutManager(new GridLayoutManager(this, 4));
 
 
+        dataChangeListener();
+
+    }
+
+    private void dataChangeListener() {
         model.getStickerLocal().observe(this, stickerLocals -> {
             if (stickerLocals.size() > 0) {
                 img.setImageURI(stickerLocals.get(0).getUri());
@@ -115,8 +140,7 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
             updateView(listSticker.size());
 
         });
-        model.getListSticker(db,packLocal.getId());
-
+        model.getListSticker(db, packLocal.getId());
     }
 
     private void updateView(int size) {
@@ -156,7 +180,7 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
                 showPopupMenu();
                 break;
             case R.id.btnAddPack:
-                Toast.makeText(this, "add pack", Toast.LENGTH_SHORT).show();
+                addPackToWhatsApp(uriList, packLocal.getName(), packLocal.getAuthor());
                 break;
         }
     }
@@ -192,7 +216,7 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
         tvName.setText(packLocal.getName());
         tvAuthor.setText(packLocal.getAuthor());
 
-        model.getListSticker(db,packLocal.getId());
+        model.getListSticker(db, packLocal.getId());
     }
 
     @Override
@@ -213,6 +237,78 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
         }
     }
 
+    @Override
+    public void addPackToWhatsApp(List<Uri> uris, String namePack, String author) {
+        boolean b = WhitelistCheck.isWhitelisted(this, "." + namePack +author+ Common.KEY_APP);
+
+        if (!b) {
+            StickerPacksManager.stickerPacksContainer.getStickerPacks().clear();
+
+            getListUriSticker(uris);
+
+            saveStickerPack(uris, namePack, author);
+
+        } else {
+            Toast.makeText(context, "This package has been added WhatsApp!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void getListUriSticker(List<Uri> uris) {
+        uris.clear();
+        for (StickerLocal stickerLocal : listSticker) {
+            uris.add(stickerLocal.getUri());
+        }
+    }
+
+
+    private void saveStickerPack(List<Uri> uries, String name, String author) {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Wait a moment while we process your stickers..."); // Setting Message
+        progressDialog.setTitle("Processing images"); // Setting Title
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+        progressDialog.show(); // Display Progress Dialog
+        progressDialog.setCancelable(false);
+        new Thread(() -> {
+            try {
+
+                //fixme: create pack
+
+                String identifier = "." + name+author + Common.KEY_APP;
+                StickerPack stickerPack = new StickerPack(identifier, name, author, Objects.requireNonNull(uries.toArray())[0].toString(), "", "", "", "");
+
+                //Save the sticker images locally and get the list of new stickers for pack
+                List<Sticker> stickerList = StickerPacksManager.saveStickerPackFilesLocally(stickerPack.identifier, uries, this);
+                stickerPack.setStickers(stickerList);
+
+                //Generate image tray icon
+                String stickerPath = Constants.STICKERS_DIRECTORY_PATH + identifier;
+//                String trayIconFile = FileUtils.generateRandomIdentifier() + ".png";
+                String trayIconFile = System.currentTimeMillis() + ".png";
+                StickerPacksManager.createStickerPackTrayIconFile(uries.get(0), Uri.parse(stickerPath + "/" + trayIconFile), this);
+                stickerPack.trayImageFile = trayIconFile;
+
+                //Save stickerPack created to write in json
+                StickerPacksManager.stickerPacksContainer.addStickerPack(stickerPack);
+                StickerPacksManager.saveStickerPacksToJson(StickerPacksManager.stickerPacksContainer);
+                insertStickerPackInContentProvider(stickerPack);
+
+                addStickerPackToWhatsApp(stickerPack.identifier, stickerPack.name);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.d("hblong", "HomeActivity | saveStickerPack: 1111111");
+
+            progressDialog.dismiss();
+        }).start();
+    }
+
+    private void insertStickerPackInContentProvider(StickerPack stickerPack) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("stickerPack", new Gson().toJson(stickerPack));
+        getContentResolver().insert(StickerContentProvider.AUTHORITY_URI, contentValues);
+    }
 
     private void showDialogStickerDetail(StickerLocal stickerLocal) {
 
@@ -247,7 +343,7 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
 
         btnBack.setOnClickListener(v -> alertDialog.dismiss());
         btnAddPack.setOnClickListener(v -> {
-            Toast.makeText(this, "ADd", Toast.LENGTH_SHORT).show();
+            addPackToWhatsApp(uriList, packLocal.getName(), packLocal.getAuthor());
         });
 
 
@@ -268,17 +364,17 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
     }
 
 
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CODE_REQUEST) {
 
-            ArrayList<Uri> uris = new ArrayList<>();
-            ArrayList<Image> images = ImagePicker.getImages(data);
-            for (int i = 0; i < images.size(); i++) {
-                uris.add(images.get(i).getUri());
-            }
+        if (requestCode == CODE_REQUEST) {
             if (resultCode == RESULT_OK) {
+                ArrayList<Uri> uris = new ArrayList<>();
+                ArrayList<Image> images = ImagePicker.getImages(data);
+                for (int i = 0; i < images.size(); i++) {
+                    uris.add(images.get(i).getUri());
+                }
                 if (uris.size() > 0) {
                     CropImage.activity(uris.get(0))
                             .setAspectRatio(1, 1)
@@ -309,6 +405,11 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
             }
         }
 
+    }
+
+    @Override
+    protected void deleteListFileCache() {
+        StickerPacksManager.deleteStickerPack(0);
     }
 
     private Uri saveFileToCache(Uri data) {
