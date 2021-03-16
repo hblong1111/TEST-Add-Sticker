@@ -235,7 +235,7 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
 
         btnAddPack.setVisibility(this.btnAddPack.getVisibility());
         btnAddPack.setBackground(this.btnAddPack.getBackground());
-        btnAddPack.setClickable(this.btnAddPack.isClickable());
+        btnAddPack.setEnabled(this.btnAddPack.isClickable());
 
 
         btnShare.setVisibility(View.GONE);
@@ -280,8 +280,6 @@ public class PackLocalDetailActivity extends AppCompatActivity implements View.O
             }
             if (resultCode == RESULT_OK) {
                 if (uris.size() > 0) {
-                    Log.d("hblong", "CreateFragment | onActivityResult: " + uris.get(0));
-//                    CutOut.activity().src(uris.get(0)).intro().start(this);
                     CropImage.activity(uris.get(0))
                             .setAspectRatio(1, 1)
                             .start(this);

@@ -23,11 +23,8 @@ public class FileUtils {
 
         File file = new File(context.getCacheDir(), "check.txt");
         if (file.exists()) {
-            Log.d("hblong", "FileUtils | checkCache: " + "file ok");
             return true;
-
         } else {
-            Log.d("hblong", "FileUtils | checkCache: " + "not file");
             file.mkdirs();
             return false;
         }

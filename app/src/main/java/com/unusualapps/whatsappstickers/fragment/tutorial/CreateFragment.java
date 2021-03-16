@@ -124,7 +124,6 @@ public class CreateFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d("hblong", "CreateFragment | onActivityResult: " + 0);
         if (requestCode == CODE_REQUEST) {
 
             ArrayList<Uri> uris = new ArrayList<>();
@@ -134,7 +133,6 @@ public class CreateFragment extends Fragment {
             }
             if (resultCode == RESULT_OK) {
                 if (uris.size() > 0) {
-                    Log.d("hblong", "CreateFragment | onActivityResult: " + uris.get(0));
                     CutOut.activity().src(uris.get(0)).intro().start((AppCompatActivity) getActivity());
                 }
             }
