@@ -182,6 +182,7 @@ public class PackLocalDetailActivity extends AddStickerPackActivity implements V
             case R.id.btnAddPack:
                 addPackToWhatsApp(uriList, packLocal.getName(), packLocal.getAuthor());
                 break;
+
         }
     }
 

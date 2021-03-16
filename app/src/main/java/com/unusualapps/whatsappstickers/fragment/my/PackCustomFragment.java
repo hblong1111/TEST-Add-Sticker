@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.unusualapps.whatsappstickers.Event.HomeActivityEvent;
 import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.activities.CreateNewPackLocalActivity;
+import com.unusualapps.whatsappstickers.activities.SettingActivity;
 import com.unusualapps.whatsappstickers.adapter.PackLocalAdapter;
 import com.unusualapps.whatsappstickers.db.AppDatabase;
 import com.unusualapps.whatsappstickers.db.DatabaseModule;
@@ -130,6 +131,7 @@ public class PackCustomFragment extends Fragment implements View.OnClickListener
     }
 
     private void settingApp() {
+        startActivity(new Intent(getContext(), SettingActivity.class));
 
     }
 

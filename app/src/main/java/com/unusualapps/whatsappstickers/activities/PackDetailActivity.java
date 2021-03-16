@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -327,7 +328,7 @@ public class PackDetailActivity extends AddStickerPackActivity implements View.O
         });
 
         btnShare.setOnClickListener(v -> {
-            //todo: share app
+            shareApp();
         });
 
 
@@ -346,7 +347,13 @@ public class PackDetailActivity extends AddStickerPackActivity implements View.O
         alertDialog.show();
         alertDialog.getWindow().setAttributes(lp);
     }
-
+    private void shareApp() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.app_name) + "\nhttps://play.google.com/store/apps/details?id=" + getPackageName());
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+        startActivity(Intent.createChooser(shareIntent, "Share..."));
+    }
     class TaskDownloadImage extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {

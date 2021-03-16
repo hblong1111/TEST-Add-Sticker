@@ -51,6 +51,15 @@
     <string name="msg_save_image">Are you want to exit without saving image ?</string>
     <string name="app_intent_name">PhotoEditor</string>
     <string name="msg_save_image_to_share">Please save image to share</string>
-    <string name="msg_share_image">Share Image</string>>
+    <string name="msg_share_image">Share Image</string>
+    <string name="setting">Settings</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="rate">Rate App</string>
+    <string name="feedback_us">Feedback Us</string>
+    <string name="share_app">Share App</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="logout">Logout</string>
+    <string name="policy_link">https://www.google.com.vn</string>
+    <string name="email_feedback">hblong1111@gmail.com</string>>
 
 </resources>
