@@ -28,7 +28,6 @@
         <activity android:name=".activities.CreateNewPackLocalActivity" />
         <activity android:name=".activities.PackDetailActivity" />
         <activity android:name=".activities.HomeActivity" />
-        <activity android:name=".activities.TestActivity" />
         <activity
             android:name=".activities.AddToStickerPackActivity"
             android:label="Add to sticker pack">
@@ -36,7 +35,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MainActivity" />
         </activity>
-        <activity android:name=".activities.MainActivity" />
         <activity
             android:name=".backgroundRemover.CutOutActivity"
             android:screenOrientation="portrait"

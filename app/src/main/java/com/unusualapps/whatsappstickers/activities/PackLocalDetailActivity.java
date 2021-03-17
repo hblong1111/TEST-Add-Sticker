@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -31,6 +32,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.gabrielbb.cutout.CutOut;
 import com.google.gson.Gson;
 import com.nguyenhoanglam.imagepicker.model.Image;
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
@@ -38,7 +40,6 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.unusualapps.whatsappstickers.Event.PackLocalDetailEvent;
 import com.unusualapps.whatsappstickers.R;
 import com.unusualapps.whatsappstickers.adapter.StickerLocalAdapter;
-import com.unusualapps.whatsappstickers.backgroundRemover.CutOut;
 import com.unusualapps.whatsappstickers.constants.Constants;
 import com.unusualapps.whatsappstickers.db.AppDatabase;
 import com.unusualapps.whatsappstickers.db.DatabaseModule;
@@ -66,7 +67,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.unusualapps.whatsappstickers.fragment.tutorial.CreateFragment.addImageToGallery;
+import static com.github.gabrielbb.cutout.CutOut.CUTOUT_ACTIVITY_REQUEST_CODE;
+import static com.github.gabrielbb.cutout.CutOut.CUTOUT_ACTIVITY_RESULT_ERROR_CODE;
+import static com.github.gabrielbb.cutout.CutOut.getError;
+import static com.github.gabrielbb.cutout.CutOut.getUri;
 
 public class PackLocalDetailActivity extends AddStickerPackActivity implements View.OnClickListener, PackLocalDetailEvent {
     private static final int CODE_REQUEST = 645;
@@ -388,12 +392,37 @@ public class PackLocalDetailActivity extends AddStickerPackActivity implements V
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
-                Log.d("hblong", "PackLocalDetailActivity | onActivityResult: " + resultUri.toString());
-                startActivityForResult(new Intent(this, EditImageActivity.class).setData(resultUri), REQUEST_CODE_EDIT);
+                CutOut.activity()
+                        .src(resultUri)
+                        .bordered()
+                        .noCrop()
+                        .start(this);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
+            return;
         }
+
+
+
+        if (requestCode == CUTOUT_ACTIVITY_REQUEST_CODE) {
+
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    Uri imageUri = getUri(data);
+                    // Save the image using the returned Uri here
+
+                    startActivityForResult(new Intent(this, EditImageActivity.class).setData(imageUri), REQUEST_CODE_EDIT);
+                    break;
+                case CUTOUT_ACTIVITY_RESULT_ERROR_CODE:
+                    Exception ex = getError(data);
+                    break;
+                default:
+                    System.out.print("User cancelled the CutOut screen");
+            }
+            return;
+        }
+
 
         if (requestCode == REQUEST_CODE_EDIT) {
             if (resultCode == RESULT_OK) {

@@ -51,7 +51,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView211"
                 style="@style/TitleEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,7 +63,6 @@
                 app:layout_constraintVertical_bias="0.615" />
 
             <ImageView
-                android:id="@+id/imageView101"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_right"
@@ -94,7 +92,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView21"
                 style="@style/TitleEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +104,6 @@
                 app:layout_constraintVertical_bias="0.615" />
 
             <ImageView
-                android:id="@+id/imageView101111"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_right"
@@ -137,7 +133,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView2111231"
                 style="@style/TitleEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -150,7 +145,6 @@
                 app:layout_constraintVertical_bias="0.615" />
 
             <ImageView
-                android:id="@+id/imageView101112"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_right"
@@ -180,7 +174,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView211123"
                 style="@style/TitleEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -193,7 +186,6 @@
                 app:layout_constraintVertical_bias="0.615" />
 
             <ImageView
-                android:id="@+id/imageView1011"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_right"
