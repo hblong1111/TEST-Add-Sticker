@@ -260,7 +260,6 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                 hideLoading();
                 showSnackbar(e.getMessage());
                 onBackPressed();
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             }
         }
     }

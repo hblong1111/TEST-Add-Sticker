@@ -78,7 +78,9 @@ public class TextEditorDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.add_text_dialog, container, false);
+        View view = inflater.inflate(R.layout.add_text_dialog, container, false);
+        view.findViewById(R.id.add_text_edit_text).requestFocus();
+        return view;
     }
 
     @Override

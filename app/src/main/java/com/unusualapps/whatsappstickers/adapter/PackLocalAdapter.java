@@ -57,7 +57,7 @@ public class PackLocalAdapter extends RecyclerView.Adapter<PackLocalAdapter.View
         holder.rcv.setAdapter(new ItemAdapter(stickerLocals));
         holder.rcv.setLayoutManager(new GridLayoutManager(holder.itemView.getContext(), 6));
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.view.setOnClickListener(v -> {
             holder.itemView.getContext().startActivity(new Intent(v.getContext(), PackLocalDetailActivity.class).putExtra(Common.CODE_PUT_PACK, packLocal));
         });
 
@@ -73,7 +73,7 @@ public class PackLocalAdapter extends RecyclerView.Adapter<PackLocalAdapter.View
                         v.getContext().startActivity(intent);
                         break;
                     case R.id.item_delete_pack:
-                        StickerPackLocalUtils.deletePackLocal(db,packLocal.getId());
+                        StickerPackLocalUtils.deletePackLocal(db, packLocal.getId());
                         list.remove(position);
                         notifyDataSetChanged();
                         break;
@@ -101,7 +101,7 @@ public class PackLocalAdapter extends RecyclerView.Adapter<PackLocalAdapter.View
         private ImageButton btnMore;
         private RecyclerView rcv;
 
-
+        private View view;
         //itemAdapter
         private ImageView view0;
         private ImageView img;
@@ -117,6 +117,7 @@ public class PackLocalAdapter extends RecyclerView.Adapter<PackLocalAdapter.View
 
             view0 = itemView.findViewById(R.id.view0);
             img = itemView.findViewById(R.id.img);
+            view = itemView.findViewById(R.id.viewItem);
 
         }
     }
